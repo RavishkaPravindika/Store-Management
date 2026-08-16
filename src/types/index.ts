@@ -32,6 +32,7 @@ export interface Rack {
   name: string;
   rows: number;
   cols: number;
+  slotNames?: Record<string, string>;
 }
 
 export interface Category {

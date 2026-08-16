@@ -10,9 +10,10 @@ import { Users } from './pages/Users';
 import { Stores } from './pages/Stores';
 import { Inventory } from './pages/Inventory';
 import { Unauthorized } from './pages/Unauthorized';
+
 export function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -20,30 +21,32 @@ export function App() {
 
           <Route
             element={
-            <ProtectedRoute>
+              <ProtectedRoute>
                 <Layout />
               </ProtectedRoute>
-            }>
-
+            }
+          >
             <Route path="/" element={<Dashboard />} />
 
-            {/* Super-Admin and Admin only routes */}
+            {/* Super-Admin and Admin routes */}
             <Route
               path="/stores"
               element={
-              <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
+                <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
                   <Stores />
                 </ProtectedRoute>
-              } />
+              }
+            />
 
+            {/* Super-Admin ONLY route - Admins and Users cannot access */}
             <Route
               path="/users"
               element={
-              <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
+                <ProtectedRoute allowedRoles={['super-admin']}>
                   <Users />
                 </ProtectedRoute>
-              } />
-
+              }
+            />
 
             {/* All authenticated users */}
             <Route path="/inventory" element={<Inventory />} />
@@ -52,6 +55,7 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
-    </BrowserRouter>);
-
+    </BrowserRouter>
+  );
 }
+export default App;
